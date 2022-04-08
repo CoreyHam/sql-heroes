@@ -31,15 +31,15 @@ def view_heroes(): #DONE
 
 def create_hero():
     while True:
-        name = input("Enter a Name: ")
+        name = input("Enter a Name\n> ")
         if name != '':
             break
     while True:
-        about = input("Enter an About: ")
+        about = input("Enter an About\n> ")
         if about != '':
                 break
     while True:
-        bio = input("Enter a Bio: ")
+        bio = input("Enter a Bio\n> ")
         if bio != '':
                 break
     execute_query( """
@@ -80,7 +80,7 @@ def update_hero():
         )
 
 def delete_hero():
-    name = input("Enter a Name: ")
+    name = input("Enter a Name\n> ")
     execute_query( """
     DELETE FROM heroes
     WHERE name = %(name)s;
@@ -112,7 +112,7 @@ while True:
             break
         else:
             print("Something went wrong... Try again")
-            selection = input("Enter a number: ")
+            selection = input("Enter a number\n> ")
         
     exit_check = input("\nExit? y/n\n> ")
     if exit_check.lower() == 'y':

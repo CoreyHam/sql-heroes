@@ -15,17 +15,17 @@ def view_heroes(): #DONE
     heroes = execute_query( """
     SELECT * from heroes
     """
-    , True)
+    ,None, True)
     for hero in heroes:
         print(hero[1])
     selection = input("View more info? y/n\n> ")
     if selection.lower() == "y":
         name = input("Which hero?\n> ")
         heroes = execute_query( """
-        SELECT * from heroes WHERE name = '{}'
-        """.format(name)
+        SELECT * from heroes WHERE name = %(name)s
+        """,{'name':name}
         , True)
-        print('{}\n{}\n{}'.format(heroes[0][1],heroes[0][2],heroes[0][3]))
+        print('NAME: {}\nABOUT: {}\nBIO: {}'.format(heroes[0][1],heroes[0][2],heroes[0][3]))
 
 
 
@@ -44,9 +44,9 @@ def create_hero():
                 break
     execute_query( """
     insert into heroes(name, about_me, biography) (
-        values('{}','{}','{}')
+        values(%(name)s,%(about)s,%(bio)s)
     )
-    """.format(name, about, bio)
+    """,{'name':name, "about":about, "bio":bio}
 )
 
 def update_hero():
@@ -57,33 +57,34 @@ def update_hero():
         name = input("Enter a New Name\n> ")
         execute_query( """
         UPDATE heroes
-        SET name = '{}'
-        WHERE name = '{}';
-        """.format(name, oldname)
+        SET name = %(new_name)s
+        WHERE name = %(old_name)s;
+        """,{'new_name':name, 'old_name':oldname}
         )
     if selection == '2':
         about = input("Enter a New About Me\n> ")
         execute_query( """
         UPDATE heroes
-        SET about_me = '{}'
-        WHERE name = '{}';
-        """.format(about, name)
+        SET about_me = %(new_about)s
+        WHERE name = %(new_name)s;
+        """,
+        {'new_about': about, 'new_name': name}
         )
     if selection == '3':
         bio = input("Enter a New Bio\n> ")
         execute_query( """
         UPDATE heroes
-        SET biography = '{}'
-        WHERE name = '{}';
-        """.format(bio, name)
+        SET biography = %(bio)s
+        WHERE name = %(name)s;
+        """,{'bio':bio, 'name':name}
         )
 
 def delete_hero():
     name = input("Enter a Name: ")
     execute_query( """
     DELETE FROM heroes
-    WHERE name = '{}';
-    """.format(name)
+    WHERE name = %(name)s;
+    """,{'name':name}
     )
     print("{} successfully removed".format(name))
 

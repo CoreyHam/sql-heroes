@@ -17,14 +17,14 @@ def create_connection(db_name, db_user, db_password, db_host = "localhost", db_p
 
 # Context managers - python
 # open vs. closed to DBs - need to close
-def execute_query(query, is_select=False):
+def execute_query(query, params=None, is_select=False):
     # Connect to an existing database
     with create_connection("postgres", "postgres", "postgres") as conn:
         # Execute the query and fetch all records
         if is_select:
-            return conn.execute(query).fetchall()
+            return conn.execute(query, params).fetchall()
         else:
-            conn.execute(query)
+            conn.execute(query, params)
             # Commit the query to the database
             conn.commit()
 
